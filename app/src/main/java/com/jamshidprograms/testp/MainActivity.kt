@@ -1,30 +1,34 @@
 package com.jamshidprograms.testp
 
+import android.annotation.SuppressLint
+import android.app.Dialog
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.ImageView
-import android.widget.LinearLayout
-import android.widget.TextView
+import android.view.Window
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
+import com.jamshidprograms.testp.databinding.ActivityMainBinding
+import com.jamshidprograms.testp.databinding.CustomAlertDialogBinding
 import com.jamshidprograms.testp.managers.TestManager
 import com.jamshidprograms.testp.models.QuestionData
 import com.jamshidprograms.testp.utils.toast
 
 class MainActivity : AppCompatActivity() {
+    private lateinit var binding: ActivityMainBinding
     private lateinit var questionTextView: TextView
     private val allVariationsViewGroup by lazy {
         ArrayList<ViewGroup>()
     }
     private var selectedVariationImageView: ImageView? = null
     private lateinit var nextBtn: Button
-    private val questionsList by lazy { ArrayList<QuestionData>() }
+        private val questionsList by lazy { ArrayList<QuestionData>() }
     lateinit var testManager: TestManager
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
         getAllQuestions()
         testManager = TestManager(questionsList)
         loadView()
@@ -158,14 +162,36 @@ class MainActivity : AppCompatActivity() {
             if (testManager.hasNextQuestion()) {
                 loadDataToView()
             } else {
-                val intent = Intent(this, WinActivity::class.java)
                 intent.putExtra("CORRECT", testManager.correctAnswerCount.toString())
                 intent.putExtra("WRONG", testManager.wrongAnswerCount.toString())
                 intent.putExtra("PERCENT", testManager.answerWithPercent().toString() + " % ")
-                startActivity(intent)
+                custom()
             }
         } else {
             toast("Please choose one of variations ;)")
         }
+    }
+    @SuppressLint("SetTextI18n")
+    fun custom(){
+        val binding: CustomAlertDialogBinding = CustomAlertDialogBinding.inflate(layoutInflater)
+
+        val dialog = Dialog(this@MainActivity)
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialog.setContentView(binding.root)
+        dialog.setCancelable(true)
+        dialog.window?.attributes?.windowAnimations = R.style.DialogAnimation
+        binding.btn1.setOnClickListener {
+            dialog.cancel()
+            Toast.makeText(this, "You clicked cancel", Toast.LENGTH_SHORT).show()
+        }
+        binding.btn2.setOnClickListener {
+            dialog.cancel()
+            Toast.makeText(this, "You clicked OK", Toast.LENGTH_SHORT).show()
+        }
+        binding.correct.text = intent.getStringExtra("CORRECT")
+        binding.wrong.text = intent.getStringExtra("WRONG")
+        binding.percent.text = intent.getStringExtra("PERCENT")
+        binding.ikkisi.text = intent.getStringExtra("CORRECT").toString() + " / " + "10"
+        dialog.show()
     }
 }

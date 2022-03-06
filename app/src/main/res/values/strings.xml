@@ -1,3 +1,6 @@
 <resources>
     <string name="app_name">testp</string>
+    <string name="cancel">CANCEL</string>
+    <string name="ok">OK</string>
+    <string name="congrulation">CONGRULATION!!!</string>
 </resources>

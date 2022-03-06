@@ -13,7 +13,6 @@ import com.jamshidprograms.testp.databinding.ActivityMainBinding
 import com.jamshidprograms.testp.databinding.CustomAlertDialogBinding
 import com.jamshidprograms.testp.managers.TestManager
 import com.jamshidprograms.testp.models.QuestionData
-import com.jamshidprograms.testp.utils.toast
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
@@ -162,17 +161,12 @@ class MainActivity : AppCompatActivity() {
             if (testManager.hasNextQuestion()) {
                 loadDataToView()
             } else {
-                intent.putExtra("CORRECT", testManager.correctAnswerCount.toString())
-                intent.putExtra("WRONG", testManager.wrongAnswerCount.toString())
-                intent.putExtra("PERCENT", testManager.answerWithPercent().toString() + " % ")
                 custom()
             }
-        } else {
-            toast("Please choose one of variations ;)")
         }
     }
     @SuppressLint("SetTextI18n")
-    fun custom(){
+    private fun custom(){
         val binding: CustomAlertDialogBinding = CustomAlertDialogBinding.inflate(layoutInflater)
 
         val dialog = Dialog(this@MainActivity)
@@ -188,10 +182,10 @@ class MainActivity : AppCompatActivity() {
             dialog.cancel()
             Toast.makeText(this, "You clicked OK", Toast.LENGTH_SHORT).show()
         }
-        binding.correct.text = intent.getStringExtra("CORRECT")
-        binding.wrong.text = intent.getStringExtra("WRONG")
-        binding.percent.text = intent.getStringExtra("PERCENT")
-        binding.ikkisi.text = intent.getStringExtra("CORRECT").toString() + " / " + "10"
+        binding.correct.text = testManager.correctAnswerCount.toString()
+        binding.wrong.text = testManager.wrongAnswerCount.toString()
+        binding.percent.text = testManager.answerWithPercent().toString() + " % "
+        binding.ikkisi.text = testManager.correctAnswerCount.toString() + " / " + "10"
         dialog.show()
     }
 }

@@ -1,14 +1,19 @@
 package com.jamshidprograms.testp
 
 import android.annotation.SuppressLint
+import android.app.AlertDialog
 import android.app.Dialog
+import android.content.Context
+import android.content.DialogInterface
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
 import android.view.Window
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
+import com.google.android.material.snackbar.Snackbar
 import com.jamshidprograms.testp.databinding.ActivityMainBinding
 import com.jamshidprograms.testp.databinding.CustomAlertDialogBinding
 import com.jamshidprograms.testp.managers.TestManager
@@ -17,6 +22,7 @@ import com.jamshidprograms.testp.models.QuestionData
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var questionTextView: TextView
+    var doubleBackClick = false
     private val allVariationsViewGroup by lazy {
         ArrayList<ViewGroup>()
     }
@@ -162,11 +168,12 @@ class MainActivity : AppCompatActivity() {
                 loadDataToView()
             } else {
                 custom()
+                saveData()
             }
         }
     }
     @SuppressLint("SetTextI18n")
-    private fun custom(){
+    fun custom(){
         val binding: CustomAlertDialogBinding = CustomAlertDialogBinding.inflate(layoutInflater)
 
         val dialog = Dialog(this@MainActivity)
@@ -177,15 +184,32 @@ class MainActivity : AppCompatActivity() {
         binding.btn1.setOnClickListener {
             dialog.cancel()
             Toast.makeText(this, "You clicked cancel", Toast.LENGTH_SHORT).show()
+            startActivity(Intent(this@MainActivity, StartActivity::class.java))
         }
         binding.btn2.setOnClickListener {
             dialog.cancel()
             Toast.makeText(this, "You clicked OK", Toast.LENGTH_SHORT).show()
+            startActivity(Intent(this@MainActivity, StartActivity::class.java))
         }
-        binding.correct.text = testManager.correctAnswerCount.toString()
-        binding.wrong.text = testManager.wrongAnswerCount.toString()
+        binding.correct.text = testManager.correctAnswerCount.toString() + " ta to'g'ri javob"
+        binding.wrong.text = testManager.wrongAnswerCount.toString() + " ta noto'g'ri javob"
         binding.percent.text = testManager.answerWithPercent().toString() + " % "
         binding.ikkisi.text = testManager.correctAnswerCount.toString() + " / " + "10"
         dialog.show()
     }
+    private fun saveData(){
+        val correctValue = testManager.correctAnswerCount.toString()
+        val wrongValue = testManager.wrongAnswerCount.toString()
+        val percentValue = testManager.answerWithPercent().toString() + " % "
+        val ikkisi2 = testManager.correctAnswerCount.toString() + " / " + "10"
+        val sharedPreferences:SharedPreferences = getSharedPreferences("dataStorage", Context.MODE_PRIVATE)
+        val editor:SharedPreferences.Editor = sharedPreferences.edit()
+        editor.putString("Correct1", correctValue)
+        editor.putString("Wrong1", wrongValue)
+        editor.putString("Percent1", percentValue)
+        editor.putString("ikkisi1", ikkisi2)
+        editor.apply()
+    }
+
+
 }

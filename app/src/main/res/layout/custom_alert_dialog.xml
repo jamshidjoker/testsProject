@@ -2,8 +2,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
     android:background="@drawable/win"
     tools:context=".MainActivity">
 
@@ -11,7 +11,7 @@
         android:id="@+id/ddd"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="210dp"
+        android:layout_marginTop="230dp"
         android:layout_centerHorizontal="true"
         android:text="@string/congrulation"
         android:textColor="#000000"
@@ -25,7 +25,7 @@
         android:layout_centerHorizontal="true"
         android:textSize="25sp"
         android:layout_below="@+id/ddd"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="50dp"
         android:textColor="@color/black"
         />
     <TextView
@@ -79,6 +79,5 @@
         android:layout_height="61dp"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
-
         android:text="@string/ok" />
 </RelativeLayout>
